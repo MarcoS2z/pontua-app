@@ -1,24 +1,130 @@
 /**
- * Camada de Armazenamento de Dados (LocalStorage)
- * Simula um Banco de Dados MySQL com seeding inicial e métodos helper
+ * Camada de Armazenamento de Dados (Firebase Firestore + LocalStorage Cache)
+ * Sincroniza em tempo real com o Firestore na nuvem e provê suporte a cache local.
  */
 
 const Storage = {
-  // Inicializa o banco de dados local se estiver vazio
+  db: null,
+
+  // Inicializa o banco de dados local e listeners do Firebase Firestore
   init() {
+    if (typeof firebase !== 'undefined' && APP_CONFIG.FIREBASE_CONFIG) {
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(APP_CONFIG.FIREBASE_CONFIG);
+        }
+        this.db = firebase.firestore();
+        this.initFirestoreSync();
+      } catch (err) {
+        console.warn('Erro ao inicializar Firebase:', err);
+      }
+    }
+
+    // Se o localStorage ainda estiver limpo, faz o seeding inicial
     if (!localStorage.getItem(APP_CONFIG.STORAGE_KEYS.USERS)) {
       this.seedData();
     }
   },
 
-  seedData() {
-    // 1. Usuários Padrão (Admin + Usuários Comuns de exemplo)
-    const seedUsers = [
+  initFirestoreSync() {
+    if (!this.db) return;
+
+    // 1. Sincronização em tempo real de Usuários
+    this.db.collection('users').onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        const users = [];
+        snapshot.forEach(doc => users.push(doc.data()));
+        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(users));
+
+        // Atualiza a sessão se o usuário logado mudou
+        const current = this.getCurrentUser();
+        if (current) {
+          const fresh = users.find(u => u.id === current.id);
+          if (fresh) {
+            sessionStorage.setItem(APP_CONFIG.STORAGE_KEYS.CURRENT_USER, JSON.stringify(fresh));
+          }
+        }
+      } else {
+        // Se a coleção no Firestore estiver vazia, faz upload dos dados iniciais
+        this.seedFirestore();
+      }
+    }, err => console.warn('Erro no sync de users:', err));
+
+    // 2. Sincronização de Doações
+    this.db.collection('donations').onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        const donations = [];
+        snapshot.forEach(doc => donations.push(doc.data()));
+        donations.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.DONATIONS, JSON.stringify(donations));
+      }
+    }, err => console.warn('Erro no sync de donations:', err));
+
+    // 3. Sincronização de Transferências de Pontos
+    this.db.collection('point_transfers').onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        const transfers = [];
+        snapshot.forEach(doc => transfers.push(doc.data()));
+        transfers.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.POINT_TRANSFERS, JSON.stringify(transfers));
+      }
+    }, err => console.warn('Erro no sync de point_transfers:', err));
+
+    // 4. Sincronização da Loja
+    this.db.collection('store_items').onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        const items = [];
+        snapshot.forEach(doc => items.push(doc.data()));
+        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.STORE_ITEMS, JSON.stringify(items));
+      }
+    }, err => console.warn('Erro no sync de store_items:', err));
+
+    // 5. Configurações Globais
+    this.db.collection('settings').doc('global').onSnapshot(doc => {
+      if (doc.exists) {
+        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.SETTINGS, JSON.stringify(doc.data()));
+      }
+    }, err => console.warn('Erro no sync de settings:', err));
+
+    // 6. Hall da Fama
+    this.db.collection('hall_of_fame').doc('global').onSnapshot(doc => {
+      if (doc.exists && doc.data().items) {
+        localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HALL_OF_FAME, JSON.stringify(doc.data().items));
+      }
+    }, err => console.warn('Erro no sync de hall_of_fame:', err));
+  },
+
+  async seedFirestore() {
+    if (!this.db) return;
+    const seedUsers = this.getSeedUsers();
+    const seedStoreItems = this.getSeedStoreItems();
+    const seedDonations = this.getSeedDonations();
+    const seedHallOfFame = this.getSeedHallOfFame();
+    const seedSettings = this.getSeedSettings();
+
+    try {
+      const batch = this.db.batch();
+      seedUsers.forEach(u => batch.set(this.db.collection('users').doc(u.id), u));
+      seedStoreItems.forEach(item => batch.set(this.db.collection('store_items').doc(item.id), item));
+      seedDonations.forEach(d => batch.set(this.db.collection('donations').doc(d.id), d));
+      batch.set(this.db.collection('settings').doc('global'), seedSettings);
+      batch.set(this.db.collection('hall_of_fame').doc('global'), { items: seedHallOfFame });
+
+      await batch.commit();
+      console.log('🌱 Firestore semeado com sucesso com dados iniciais!');
+    } catch (err) {
+      console.error('Erro ao semear Firestore:', err);
+    }
+  },
+
+  // Dados iniciais de fallback
+  getSeedUsers() {
+    return [
       {
         id: 'user-admin-1',
         name: 'Administrador do Sistema',
         email: 'admin@sistema.com',
-        password: 'admin', // Em prod seria hash
+        password: 'admin',
         role: 'admin',
         points: 450,
         streak: 12,
@@ -63,9 +169,10 @@ const Storage = {
         registeredAt: '2026-02-10T11:00:00Z'
       }
     ];
+  },
 
-    // 2. Prêmios da Loja de Exemplo
-    const seedStoreItems = [
+  getSeedStoreItems() {
+    return [
       {
         id: 'item-1',
         name: 'Garrafa Térmica Ecológica 500ml',
@@ -99,9 +206,10 @@ const Storage = {
         stock: 0
       }
     ];
+  },
 
-    // 3. Doações iniciais de exemplo
-    const seedDonations = [
+  getSeedDonations() {
+    return [
       {
         id: 'don-1',
         userId: 'user-admin-1',
@@ -129,9 +237,10 @@ const Storage = {
         sentToEmail: APP_CONFIG.DEFAULT_DESTINATION_EMAIL
       }
     ];
+  },
 
-    // 4. Hall da Fama inicial (Ciclo anterior)
-    const seedHallOfFame = [
+  getSeedHallOfFame() {
+    return [
       {
         id: 'hof-1',
         period: '1º Trimestre (Jan - Mar 2026)',
@@ -143,20 +252,23 @@ const Storage = {
         ]
       }
     ];
+  },
 
-    // Configurações salvas
-    const seedSettings = {
+  getSeedSettings() {
+    return {
       destinationEmail: APP_CONFIG.DEFAULT_DESTINATION_EMAIL,
       pointsPerNote: APP_CONFIG.POINTS_PER_NOTE,
       resetIntervalMonths: APP_CONFIG.RESET_INTERVAL_MONTHS,
       lastResetDate: '2026-04-01'
     };
+  },
 
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(seedUsers));
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.STORE_ITEMS, JSON.stringify(seedStoreItems));
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.DONATIONS, JSON.stringify(seedDonations));
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HALL_OF_FAME, JSON.stringify(seedHallOfFame));
-    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.SETTINGS, JSON.stringify(seedSettings));
+  seedData() {
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(this.getSeedUsers()));
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.STORE_ITEMS, JSON.stringify(this.getSeedStoreItems()));
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.DONATIONS, JSON.stringify(this.getSeedDonations()));
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HALL_OF_FAME, JSON.stringify(this.getSeedHallOfFame()));
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.SETTINGS, JSON.stringify(this.getSeedSettings()));
   },
 
   // Helpers para Usuários
@@ -166,6 +278,11 @@ const Storage = {
 
   saveUsers(users) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(users));
+    if (this.db) {
+      users.forEach(u => {
+        this.db.collection('users').doc(u.id).set(u).catch(e => console.warn(e));
+      });
+    }
   },
 
   getUserById(id) {
@@ -181,17 +298,22 @@ const Storage = {
     const index = users.findIndex(u => u.id === updatedUser.id);
     if (index !== -1) {
       users[index] = updatedUser;
-      this.saveUsers(users);
+      localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(users));
 
-      // Se for o usuário atual logado, atualiza a sessão
+      // Atualiza a sessão
       const current = this.getCurrentUser();
       if (current && current.id === updatedUser.id) {
         sessionStorage.setItem(APP_CONFIG.STORAGE_KEYS.CURRENT_USER, JSON.stringify(updatedUser));
       }
+
+      // Persiste no Firestore
+      if (this.db) {
+        this.db.collection('users').doc(updatedUser.id).set(updatedUser).catch(e => console.warn(e));
+      }
     }
   },
 
-  // Sessão de Login (Sempre re-sincroniza com os dados mais recentes do localStorage)
+  // Sessão de Login
   getCurrentUser() {
     const sessionUser = JSON.parse(sessionStorage.getItem(APP_CONFIG.STORAGE_KEYS.CURRENT_USER) || 'null');
     if (!sessionUser) return null;
@@ -219,8 +341,12 @@ const Storage = {
 
   saveDonation(donation) {
     const donations = this.getDonations();
-    donations.unshift(donation); // Adiciona no início (mais recente)
+    donations.unshift(donation);
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.DONATIONS, JSON.stringify(donations));
+
+    if (this.db) {
+      this.db.collection('donations').doc(donation.id).set(donation).catch(e => console.warn(e));
+    }
   },
 
   // Helpers para Loja
@@ -230,6 +356,11 @@ const Storage = {
 
   saveStoreItems(items) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.STORE_ITEMS, JSON.stringify(items));
+    if (this.db) {
+      items.forEach(item => {
+        this.db.collection('store_items').doc(item.id).set(item).catch(e => console.warn(e));
+      });
+    }
   },
 
   // Configurações do Sistema
@@ -245,6 +376,9 @@ const Storage = {
 
   saveSettings(settings) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    if (this.db) {
+      this.db.collection('settings').doc('global').set(settings).catch(e => console.warn(e));
+    }
   },
 
   // Hall da Fama
@@ -254,6 +388,9 @@ const Storage = {
 
   saveHallOfFame(hof) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HALL_OF_FAME, JSON.stringify(hof));
+    if (this.db) {
+      this.db.collection('hall_of_fame').doc('global').set({ items: hof }).catch(e => console.warn(e));
+    }
   },
 
   // Doação / Transferência de Pontos Entre Usuários
@@ -265,6 +402,10 @@ const Storage = {
     const transfers = this.getPointTransfers();
     transfers.unshift(transfer);
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.POINT_TRANSFERS, JSON.stringify(transfers));
+
+    if (this.db) {
+      this.db.collection('point_transfers').doc(transfer.id).set(transfer).catch(e => console.warn(e));
+    }
   }
 };
 

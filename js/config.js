@@ -18,6 +18,17 @@ const APP_CONFIG = {
   // Meses em que ocorre o reset (1-indexed: 1 = Jan, 4 = Abr, 7 = Jul, 10 = Out)
   RESET_MONTHS: [1, 4, 7, 10],
 
+  // Credenciais do Firebase Firestore
+  FIREBASE_CONFIG: {
+    apiKey: "AIzaSyCweK1mGr5epvt-bbWsM9N_kGciNYQvnQE",
+    authDomain: "pontua-app.firebaseapp.com",
+    projectId: "pontua-app",
+    storageBucket: "pontua-app.firebasestorage.app",
+    messagingSenderId: "863582970651",
+    appId: "1:863582970651:web:97298cdf1569cd818269be",
+    measurementId: "G-S45NV6GTCH"
+  },
+
   // Chaves do localStorage
   STORAGE_KEYS: {
     USERS: 'nf_users',
