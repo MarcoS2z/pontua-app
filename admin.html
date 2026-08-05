@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo | Pontua</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div id="header-bar-container"></div>
+
+      <main class="content-area">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--gold); display: flex; align-items: center; gap: 10px;">
+            <span>⚙️</span> Painel Administrativo
+          </h2>
+          <p style="color: var(--text-muted);">Gerenciamento de doações, usuários, prêmios e configurações globais.</p>
+        </div>
+
+        <!-- Abas do Painel Admin -->
+        <div class="admin-nav-tabs">
+          <button class="admin-tab-btn active" data-tab="tab-stats">📊 Estatísticas Globais</button>
+          <button class="admin-tab-btn" data-tab="tab-users">👥 Gerenciar Usuários</button>
+          <button class="admin-tab-btn" data-tab="tab-donations">🧾 Histórico de Notas</button>
+          <button class="admin-tab-btn" data-tab="tab-point-transfers">🎁 Doação de Pontos</button>
+          <button class="admin-tab-btn" data-tab="tab-settings">⚙️ Configurações & Reset de Pontos</button>
+        </div>
+
+        <!-- Conteúdo Aba 1: Estatísticas Globais -->
+        <div id="tab-stats" class="admin-tab-content">
+          <div class="admin-stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-icon" style="color: var(--accent-light);">🧾</div>
+              <div class="stat-card-info">
+                <h4>Total de Notas Recebidas</h4>
+                <p id="stat-total-notes">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-icon" style="color: var(--gold);">⭐</div>
+              <div class="stat-card-info">
+                <h4>Pontos Distribuídos</h4>
+                <p id="stat-total-points">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-icon" style="color: var(--primary-light);">👥</div>
+              <div class="stat-card-info">
+                <h4>Usuários Cadastrados</h4>
+                <p id="stat-total-users">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-icon" style="color: var(--streak);">🎁</div>
+              <div class="stat-card-info">
+                <h4>Prêmios Resgatados</h4>
+                <p id="stat-total-redemptions">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conteúdo Aba 2: Lista de Usuários -->
+        <div id="tab-users" class="admin-tab-content" style="display: none;">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>E-mail</th>
+                  <th style="text-align: center;">Pontos</th>
+                  <th style="text-align: center;">Streak</th>
+                  <th style="text-align: center;">Notas Doadas</th>
+                  <th style="text-align: center;">Nível de Acesso</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-tbody">
+                <!-- Renderizado via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Conteúdo Aba 3: Histórico de Notas (Admin) -->
+        <div id="tab-donations" class="admin-tab-content" style="display: none;">
+
+          <!-- Barra de filtros -->
+          <div class="filter-bar">
+            <div class="filter-field flex-grow">
+              <label for="donations-search-user">Buscar por usuário</label>
+              <input type="text" id="donations-search-user" class="form-control filter-control" placeholder="Nome ou e-mail do doador...">
+            </div>
+            <div class="filter-field">
+              <label for="donations-sort">Ordenar por</label>
+              <select id="donations-sort" class="form-control filter-control" style="min-width: 210px; cursor: pointer;">
+                <option value="date_desc">📅 Mais recentes primeiro</option>
+                <option value="date_asc">📅 Mais antigas primeiro</option>
+                <option value="user_asc">👤 Nome do usuário (A-Z)</option>
+                <option value="user_desc">👤 Nome do usuário (Z-A)</option>
+                <option value="value_desc">💰 Maior valor</option>
+                <option value="value_asc">💰 Menor valor</option>
+              </select>
+            </div>
+            <div class="filter-actions">
+              <button class="btn btn-primary filter-btn-action" onclick="applyDonationsFilter()">🔍 Filtrar</button>
+              <button class="btn btn-outline filter-btn-action" onclick="clearDonationsFilter()">✕ Limpar</button>
+            </div>
+          </div>
+
+          <p id="donations-count" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700; margin-bottom: 12px;"></p>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Doador</th>
+                  <th>E-mail</th>
+                  <th>Emitente / CNPJ</th>
+                  <th>Valor</th>
+                  <th>Pontos</th>
+                  <th>Data e Hora</th>
+                  <th>Chave de Acesso</th>
+                </tr>
+              </thead>
+              <tbody id="donations-table-tbody">
+                <!-- Renderizado via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="donations-pagination" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 2px solid var(--surface-border);">
+          </div>
+
+        </div>
+
+        <!-- Conteúdo Aba: Histórico Global de Doação de Pontos Entre Usuários (Admin) -->
+        <div id="tab-point-transfers" class="admin-tab-content" style="display: none;">
+          <div class="card" style="margin-bottom: 20px; padding: 20px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+              <span>🎁</span> Histórico Global de Doação de Pontos Entre Usuários
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">Registro de todas as transferências diretas de pontos efetuadas entre usuários.</p>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Doador (Remetente)</th>
+                  <th>E-mail Doador</th>
+                  <th>Destinatário</th>
+                  <th>E-mail Destinatário</th>
+                  <th>Pontos Doados</th>
+                  <th>Data e Hora</th>
+                </tr>
+              </thead>
+              <tbody id="point-transfers-table-tbody">
+                <!-- Renderizado via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Conteúdo Aba 5: Configurações & Reset de Pontos -->
+        <div id="tab-settings" class="admin-tab-content" style="display: none; max-width: 650px;">
+          <div class="card" style="margin-bottom: 28px;">
+            <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; border-bottom: 2px solid var(--surface-border); padding-bottom: 10px;">
+              📧 Configurações do Sistema
+            </h3>
+
+            <form id="admin-settings-form">
+              <div class="form-group">
+                <label for="setting-email">E-mail Destino Principal (Reenvio das Notas)</label>
+                <input type="email" id="setting-email" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setting-points">Pontos por Nota Validada</label>
+                <input type="number" id="setting-points" class="form-control" min="1" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setting-interval">Intervalo de Reset dos Pontos (em meses)</label>
+                <input type="number" id="setting-interval" class="form-control" min="1" required>
+              </div>
+
+              <button type="submit" class="btn btn-accent" style="margin-top: 10px;">
+                💾 Salvar Configurações
+              </button>
+            </form>
+          </div>
+
+          <div class="card" style="border-color: var(--danger);">
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--danger); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <span>🚨</span> Encerrar Ciclo & Resetar Pontos
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5;">
+              Ao acionar o reset manual, o ranking atual será congelado e salvo no <strong>Hall da Fama</strong>. Todos os pontos dos usuários serão zerados, mas os streaks e o histórico de doações serão preservados.
+            </p>
+
+            <button id="manual-reset-trigger-btn" class="btn btn-danger">
+              🔄 Zerar Pontos & Salvar Hall da Fama Agora
+            </button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

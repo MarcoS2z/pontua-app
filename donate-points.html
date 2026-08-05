@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transferir Pontos | Pontua</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div id="header-bar-container"></div>
+
+      <main class="content-area">
+        <div style="max-width: 650px; margin: 0 auto;">
+          <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.8rem; font-weight: 900;">🎁 Transferir Pontos a Outro Usuário</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Transfira parte dos seus pontos acumulados para amigos ou outros doadores!</p>
+          </div>
+
+          <div class="card" style="margin-bottom: 24px;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px;">1. Localizar Destinatário</h3>
+            
+            <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+              <input type="text" id="search-user-input" class="form-control" placeholder="Digite o nome ou e-mail do usuário..." style="flex: 1;">
+              <button id="search-user-btn" class="btn btn-primary">🔍 Buscar</button>
+            </div>
+
+            <div id="search-results-container">
+              <!-- Resultados da busca -->
+            </div>
+          </div>
+
+          <!-- Formulário de Transferência (Oculto até selecionar usuário) -->
+          <div id="transfer-section" class="card" style="display: none;">
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px;">
+              2. Transferir Pontos para <span id="recipient-name-display" style="color: var(--primary-light);"></span>
+            </h3>
+
+            <form id="donate-points-form">
+              <div class="form-group">
+                <label for="points-amount-input">Quantidade de Pontos (⭐)</label>
+                <input type="number" id="points-amount-input" class="form-control" placeholder="Ex: 50" min="1" required>
+              </div>
+
+              <button type="submit" class="btn btn-accent" style="width: 100%; padding: 14px; margin-top: 10px;">
+                🎁 Confirmar Transferência de Pontos
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/donate.js"></script>
+</body>
+</html>

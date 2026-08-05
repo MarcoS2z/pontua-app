@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro | Pontua - Doação de Notas Fiscais</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="auth-logo-icon">🧾</span>
+        <h1>Pon<span>tua</span></h1>
+      </div>
+      <h2>Crie sua conta</h2>
+      <p class="subtitle">Junte-se à nossa comunidade, doe suas notas e troque por prêmios!</p>
+
+      <form id="register-form" class="auth-form">
+        <div class="form-group">
+          <label for="reg-name">Nome Completo</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="Seu Nome Completo" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">E-mail</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="seuemail@exemplo.com" required autocomplete="email">
+          <small class="form-hint" style="color: var(--text-muted); font-size: 0.8rem; margin-top: 4px; display: block;">
+            ℹ️ Seu e-mail será visível para outros usuários no sistema para busca e doação de pontos.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Senha</label>
+          <div class="password-input-wrapper" style="position: relative;">
+            <input type="password" id="reg-password" class="form-control" placeholder="Mínimo 6 caracteres (letras e números)" required autocomplete="new-password" style="width: 100%; padding-right: 44px;">
+            <button type="button" class="toggle-password-btn" data-target="reg-password" title="Visualizar senha" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+          <small class="form-hint" style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; display: block;">
+            A senha deve conter no mínimo 6 dígitos, com pelo menos uma letra e um número.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-confirm-password">Confirmar Senha</label>
+          <div class="password-input-wrapper" style="position: relative;">
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="Repita a senha digitada acima" required autocomplete="new-password" style="width: 100%; padding-right: 44px;">
+            <button type="button" class="toggle-password-btn" data-target="reg-confirm-password" title="Visualizar senha" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-accent" style="width: 100%; margin-top: 14px; padding: 14px;">
+          Criar Minha Conta ✨
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Já possui uma conta? <a href="index.html">Faça login</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const SVG_EYE_OPEN = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+      const SVG_EYE_OFF = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+      // Alternar visualização da senha
+      document.querySelectorAll('.toggle-password-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = btn.dataset.target;
+          const input = document.getElementById(targetId);
+          if (input) {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.innerHTML = isPassword ? SVG_EYE_OFF : SVG_EYE_OPEN;
+          }
+        });
+      });
+
+      const form = document.getElementById('register-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const pass = document.getElementById('reg-password').value;
+        const confirmPass = document.getElementById('reg-confirm-password').value;
+
+        const res = Auth.register(name, email, pass, confirmPass);
+        if (res.success) {
+          Auth.showToast('Conta criada com sucesso!', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 400);
+        } else {
+          Auth.showToast(res.message, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

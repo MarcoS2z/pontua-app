@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil | Pontua</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div id="header-bar-container"></div>
+
+      <main class="content-area">
+        <div class="profile-card">
+          <div class="profile-header-info">
+            <div class="profile-avatar-large" id="profile-avatar-display">JS</div>
+            <div>
+              <h2 id="profile-name-display" style="font-size: 1.6rem; font-weight: 900;">João Silva</h2>
+              <p id="profile-email-display" style="color: var(--text-muted); font-size: 0.95rem;">joao@email.com</p>
+            </div>
+          </div>
+
+          <div class="profile-stats-grid">
+            <div class="profile-stat-box">
+              <h4 id="profile-points-val" style="color: var(--gold);">150</h4>
+              <span>⭐ Pontos Acumulados</span>
+            </div>
+            <div class="profile-stat-box">
+              <h4 id="profile-streak-val" style="color: var(--streak);">7d</h4>
+              <span>🔥 Sequência Atual</span>
+            </div>
+            <div class="profile-stat-box">
+              <h4 id="profile-notes-val" style="color: var(--accent-light);">15</h4>
+              <span>🧾 Notas Doadas</span>
+            </div>
+          </div>
+
+          <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; border-bottom: 2px solid var(--surface-border); padding-bottom: 10px;">
+            🔐 Alterar Senha
+          </h3>
+
+          <form id="change-password-form">
+            <div class="form-group">
+              <label for="current-password-input">Senha Atual</label>
+              <div class="password-input-wrapper" style="position: relative;">
+                <input type="password" id="current-password-input" class="form-control" placeholder="Sua senha atual" required autocomplete="current-password" style="width: 100%; padding-right: 44px;">
+                <button type="button" class="toggle-password-btn" data-target="current-password-input" title="Visualizar senha" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="new-password-input">Nova Senha</label>
+              <div class="password-input-wrapper" style="position: relative;">
+                <input type="password" id="new-password-input" class="form-control" placeholder="Mínimo 6 caracteres (letras e números)" required autocomplete="new-password" style="width: 100%; padding-right: 44px;">
+                <button type="button" class="toggle-password-btn" data-target="new-password-input" title="Visualizar senha" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <small class="form-hint" style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; display: block;">
+                A senha deve conter no mínimo 6 dígitos, com pelo menos uma letra e um número.
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="confirm-password-input">Confirmar Nova Senha</label>
+              <div class="password-input-wrapper" style="position: relative;">
+                <input type="password" id="confirm-password-input" class="form-control" placeholder="Repita a nova senha digitada acima" required autocomplete="new-password" style="width: 100%; padding-right: 44px;">
+                <button type="button" class="toggle-password-btn" data-target="confirm-password-input" title="Visualizar senha" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 14px; padding: 14px;">
+              Salvar Nova Senha 🔐
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

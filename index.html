@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Pontua - Doação de Notas Fiscais</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="auth-logo-icon">🧾</span>
+        <h1>Pon<span>tua</span></h1>
+      </div>
+      <h2>Bem-vindo de volta!</h2>
+      <p class="subtitle">Faça login para doar suas notas fiscais e acumular pontos.</p>
+
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="login-email">E-mail</label>
+          <input type="email" id="login-email" class="form-control" placeholder="seuemail@exemplo.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Senha</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; padding: 14px;">
+          Entrar na Conta 🚀
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Não tem uma conta? <a href="register.html">Cadastre-se aqui</a>
+      </div>
+
+      <div class="demo-credentials-box">
+        <strong>💡 Contas para Testes Rápidos:</strong><br>
+        • <strong>Admin:</strong> admin@sistema.com | <strong>Senha:</strong> admin<br>
+        • <strong>Usuário:</strong> maria@email.com | <strong>Senha:</strong> 123
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Se já estiver logado, redireciona pro dashboard
+      if (Storage.getCurrentUser()) {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      const form = document.getElementById('login-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+
+        const res = Auth.login(email, pass);
+        if (res.success) {
+          Auth.showToast('Login realizado com sucesso!', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 400);
+        } else {
+          Auth.showToast(res.message, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

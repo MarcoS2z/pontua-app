@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja de Prêmios | Pontua</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/store.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div id="header-bar-container"></div>
+
+      <main class="content-area">
+        <div class="store-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-weight: 900;">🛒 Loja de Prêmios</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Troque seus pontos acumulados por recompensas incríveis!</p>
+          </div>
+          <div id="admin-add-product-container">
+            <!-- Botão de adicionar prêmio exclusivo para Admin -->
+          </div>
+        </div>
+
+        <div id="store-grid-container" class="store-grid">
+          <!-- Renderizado via JS -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Admin: Adicionar / Editar Prêmio -->
+  <div id="product-modal-overlay" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-product-title">➕ Criar Novo Prêmio</h3>
+        <button class="modal-close" onclick="document.getElementById('product-modal-overlay').classList.remove('active')">&times;</button>
+      </div>
+      <form id="product-form">
+        <input type="hidden" id="product-id">
+
+        <div class="form-group">
+          <label for="product-name">Nome do Prêmio</label>
+          <input type="text" id="product-name" class="form-control" placeholder="ex: Camiseta Exclusiva" required>
+        </div>
+
+        <div class="form-group">
+          <label for="product-desc">Descrição</label>
+          <textarea id="product-desc" class="form-control" rows="3" placeholder="Detalhes sobre o produto..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label for="product-cost">Custo em Pontos (⭐)</label>
+            <input type="number" id="product-cost" class="form-control" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="product-stock">Estoque Disponível</label>
+            <input type="number" id="product-stock" class="form-control" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="product-image">URL da Imagem</label>
+          <input type="url" id="product-image" class="form-control" placeholder="https://exemplo.com/imagem.jpg" required>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="document.getElementById('product-modal-overlay').classList.remove('active')">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-accent" style="flex: 1;">
+            Salvar Prêmio
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
+</body>
+</html>

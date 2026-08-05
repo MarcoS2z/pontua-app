@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico de Doações | Pontua</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div id="header-bar-container"></div>
+
+      <main class="content-area">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <h2 style="font-size: 1.8rem; font-weight: 900;">📋 Histórico Completo de Doações</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Veja todas as suas notas fiscais validadas, repetidas e inválidas.</p>
+          </div>
+
+          <!-- Filtros de Status -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-outline filter-btn active" data-filter="all">Todas</button>
+            <button class="btn btn-outline filter-btn" data-filter="valid">✅ Válidas</button>
+            <button class="btn btn-outline filter-btn" data-filter="duplicate">🔁 Repetidas</button>
+            <button class="btn btn-outline filter-btn" data-filter="invalid">❌ Inválidas</button>
+            <button class="btn btn-outline filter-btn" data-filter="transfers">🎁 Pontos Doados</button>
+          </div>
+        </div>
+
+        <div class="card" style="padding: 24px;">
+          <div id="full-history-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Renderizado via JS -->
+          </div>
+
+          <!-- Paginação -->
+          <div id="pagination-container" style="display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding-top: 16px; border-top: 2px solid var(--surface-border);">
+            <!-- Renderizado via JS -->
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>
