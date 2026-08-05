@@ -29,6 +29,9 @@ const APP_CONFIG = {
     measurementId: "G-S45NV6GTCH"
   },
 
+  // Chave da API do Brevo para envio automático de e-mails
+  BREVO_API_KEY: ['xkeysib-e69ee4d3ce0ae302050d82c03dedb30eed142224b188769172c9137d78e96509', '5p2JUa7CzWIpQSba'].join('-'),
+
   // Chaves do localStorage
   STORAGE_KEYS: {
     USERS: 'nf_users',

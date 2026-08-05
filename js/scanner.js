@@ -118,9 +118,10 @@ const Scanner = {
 
         Storage.updateUser(currentUser);
 
-        // Simula o reenvio automático da nota por e-mail
-        const emailResult = EmailService.sendNoteEmail(donationResult);
-        donationResult.sentToEmail = emailResult.sentTo;
+        // Envio automático da nota e do QR Code por e-mail via Brevo API
+        const settings = Storage.getSettings();
+        donationResult.sentToEmail = settings.destinationEmail || APP_CONFIG.DEFAULT_DESTINATION_EMAIL;
+        EmailService.sendNoteEmail(donationResult);
       }
     }
 
