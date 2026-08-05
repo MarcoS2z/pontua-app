@@ -116,13 +116,38 @@ function handleScanResult(donationResult, updatedUser) {
     // Exibe Modal com QR Code Virtual Reavaliado e envio por email
     QRCodeGen.showQRCodeModal(donationResult);
   } else if (donationResult.status === 'duplicate') {
-    Auth.showToast(`Nota Fiscal repetida! Esta nota já foi registrada anteriormente. ⚠️`, 'warning');
+    showScannerFeedback('⚠️ Esta nota já foi registrada anteriormente por você ou outro usuário.', 'warning');
   } else {
-    Auth.showToast(donationResult.message || 'Nota Fiscal inválida ou formato não reconhecido. ❌', 'error');
+    showScannerFeedback('❌ ' + (donationResult.message || 'QR Code inválido: este código não pertence a uma Nota Fiscal Eletrônica.'), 'error');
   }
 
   // Atualiza a lista de histórico recente
   renderRecentHistory();
+}
+
+// Exibe uma mensagem de feedback diretamente dentro do modal do scanner
+function showScannerFeedback(message, type) {
+  const el = document.getElementById('scanner-feedback-msg');
+  if (!el) return;
+
+  const colors = {
+    error:   { bg: 'rgba(234,67,53,0.12)', border: 'var(--danger)', color: '#ff6b6b' },
+    warning: { bg: 'rgba(251,188,4,0.12)', border: 'var(--warning)', color: '#fcd34d' },
+    success: { bg: 'rgba(52,168,83,0.12)', border: 'var(--accent)', color: 'var(--accent-light)' }
+  };
+  const c = colors[type] || colors.error;
+
+  el.style.display = 'block';
+  el.style.background = c.bg;
+  el.style.border = `1.5px solid ${c.border}`;
+  el.style.color = c.color;
+  el.textContent = message;
+
+  // Some automaticamente após 5 segundos
+  clearTimeout(el._hideTimeout);
+  el._hideTimeout = setTimeout(() => {
+    el.style.display = 'none';
+  }, 5000);
 }
 
 // Renderiza as últimas 5 atividades (notas e doações de pontos) no dashboard
