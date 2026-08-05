@@ -170,6 +170,12 @@ const Auth = {
                   <span>Perfil</span>
                 </a>
               </li>
+              <li>
+                <a href="about.html" class="nav-link ${activePage === 'about' ? 'active' : ''}">
+                  <span class="nav-icon">💙</span>
+                  <span>Sobre Nós</span>
+                </a>
+              </li>
               ${isAdmin ? `
               <li>
                 <a href="admin.html" class="nav-link admin-link ${activePage === 'admin' ? 'active' : ''}">
