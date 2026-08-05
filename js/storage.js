@@ -276,11 +276,26 @@ const Storage = {
     return JSON.parse(localStorage.getItem(APP_CONFIG.STORAGE_KEYS.USERS) || '[]');
   },
 
+  // Helper para remover/substituir propriedades com valor undefined que causam erro no Firestore
+  cleanForFirestore(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+    const clean = Array.isArray(obj) ? [] : {};
+    Object.keys(obj).forEach(key => {
+      const val = obj[key];
+      if (val !== undefined) {
+        clean[key] = (typeof val === 'object' && val !== null) ? this.cleanForFirestore(val) : val;
+      } else {
+        clean[key] = null;
+      }
+    });
+    return clean;
+  },
+
   saveUsers(users) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(users));
     if (this.db) {
       users.forEach(u => {
-        this.db.collection('users').doc(u.id).set(u).catch(e => console.warn(e));
+        this.db.collection('users').doc(u.id).set(this.cleanForFirestore(u)).catch(e => console.warn(e));
       });
     }
   },
@@ -308,7 +323,7 @@ const Storage = {
 
       // Persiste no Firestore
       if (this.db) {
-        this.db.collection('users').doc(updatedUser.id).set(updatedUser).catch(e => console.warn(e));
+        this.db.collection('users').doc(updatedUser.id).set(this.cleanForFirestore(updatedUser)).catch(e => console.warn(e));
       }
     }
   },
@@ -345,7 +360,7 @@ const Storage = {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.DONATIONS, JSON.stringify(donations));
 
     if (this.db) {
-      this.db.collection('donations').doc(donation.id).set(donation).catch(e => console.warn(e));
+      this.db.collection('donations').doc(donation.id).set(this.cleanForFirestore(donation)).catch(e => console.warn(e));
     }
   },
 
@@ -358,7 +373,7 @@ const Storage = {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.STORE_ITEMS, JSON.stringify(items));
     if (this.db) {
       items.forEach(item => {
-        this.db.collection('store_items').doc(item.id).set(item).catch(e => console.warn(e));
+        this.db.collection('store_items').doc(item.id).set(this.cleanForFirestore(item)).catch(e => console.warn(e));
       });
     }
   },
@@ -377,7 +392,7 @@ const Storage = {
   saveSettings(settings) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
     if (this.db) {
-      this.db.collection('settings').doc('global').set(settings).catch(e => console.warn(e));
+      this.db.collection('settings').doc('global').set(this.cleanForFirestore(settings)).catch(e => console.warn(e));
     }
   },
 
@@ -389,7 +404,7 @@ const Storage = {
   saveHallOfFame(hof) {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.HALL_OF_FAME, JSON.stringify(hof));
     if (this.db) {
-      this.db.collection('hall_of_fame').doc('global').set({ items: hof }).catch(e => console.warn(e));
+      this.db.collection('hall_of_fame').doc('global').set(this.cleanForFirestore({ items: hof })).catch(e => console.warn(e));
     }
   },
 
@@ -404,7 +419,7 @@ const Storage = {
     localStorage.setItem(APP_CONFIG.STORAGE_KEYS.POINT_TRANSFERS, JSON.stringify(transfers));
 
     if (this.db) {
-      this.db.collection('point_transfers').doc(transfer.id).set(transfer).catch(e => console.warn(e));
+      this.db.collection('point_transfers').doc(transfer.id).set(this.cleanForFirestore(transfer)).catch(e => console.warn(e));
     }
   }
 };
