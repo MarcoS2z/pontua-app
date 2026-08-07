@@ -328,6 +328,34 @@ const Storage = {
     }
   },
 
+  updateUsersBatch(updatedUsers) {
+    if (!Array.isArray(updatedUsers) || updatedUsers.length === 0) return;
+
+    const users = this.getUsers();
+    updatedUsers.forEach(updatedUser => {
+      const index = users.findIndex(u => u.id === updatedUser.id);
+      if (index !== -1) {
+        users[index] = updatedUser;
+      }
+      // Se for o usuário atual logado, atualiza a sessão
+      const current = this.getCurrentUser();
+      if (current && current.id === updatedUser.id) {
+        sessionStorage.setItem(APP_CONFIG.STORAGE_KEYS.CURRENT_USER, JSON.stringify(updatedUser));
+      }
+    });
+
+    localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(users));
+
+    // Persiste no Firestore em lote atômico
+    if (this.db) {
+      const batch = this.db.batch();
+      updatedUsers.forEach(u => {
+        batch.set(this.db.collection('users').doc(u.id), this.cleanForFirestore(u));
+      });
+      batch.commit().catch(e => console.warn('Erro ao aplicar batch no Firestore:', e));
+    }
+  },
+
   // Sessão de Login
   getCurrentUser() {
     const sessionUser = JSON.parse(sessionStorage.getItem(APP_CONFIG.STORAGE_KEYS.CURRENT_USER) || 'null');

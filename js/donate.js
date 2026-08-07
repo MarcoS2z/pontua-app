@@ -140,15 +140,15 @@ function executePointsDonation() {
     return;
   }
 
-  // Debita do doador
+  // Debita do doador e credita no destinatário em lote atômico
   currentUser.points -= amount;
-  Storage.updateUser(currentUser);
 
-  // Credita no destinatário
   const recipientInDb = Storage.getUserById(selectedRecipient.id);
   if (recipientInDb) {
     recipientInDb.points += amount;
-    Storage.updateUser(recipientInDb);
+    Storage.updateUsersBatch([currentUser, recipientInDb]);
+  } else {
+    Storage.updateUser(currentUser);
   }
 
   // Grava a transferência no histórico global
