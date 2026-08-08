@@ -16,13 +16,28 @@
 
       <main class="content-area">
         <div class="profile-card">
-          <div class="profile-header-info">
+          <div class="profile-header-info" style="border-bottom: none; padding-bottom: 0; margin-bottom: 20px;">
             <div class="profile-avatar-large" id="profile-avatar-display">JS</div>
             <div>
               <h2 id="profile-name-display" style="font-size: 1.6rem; font-weight: 900;">João Silva</h2>
               <p id="profile-email-display" style="color: var(--text-muted); font-size: 0.95rem;">joao@email.com</p>
             </div>
           </div>
+
+          <!-- Código de Amizade -->
+          <div style="background: linear-gradient(135deg, rgba(26,115,232,0.12) 0%, rgba(52,168,83,0.12) 100%); border: 2px solid var(--primary-light); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 24px;">
+            <p style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">🤝 Código de Amizade</p>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+              <span id="friend-code-display" style="font-size: 1.9rem; font-weight: 900; letter-spacing: 4px; color: var(--primary-light); font-family: monospace;">----</span>
+              <button id="copy-friend-code-btn" onclick="copyFriendCode()" title="Copiar código" style="background: rgba(26,115,232,0.15); border: 1px solid var(--primary-light); color: var(--primary-light); border-radius: var(--radius-sm); padding: 6px 14px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s;">
+                📋 Copiar
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">Compartilhe este código para receber transferências de pontos.</p>
+          </div>
+
+          <!-- Linha Divisória -->
+          <div style="border-bottom: 2px solid var(--surface-border); margin-bottom: 24px;"></div>
 
           <div class="profile-stats-grid">
             <div class="profile-stat-box">
@@ -37,18 +52,6 @@
               <h4 id="profile-notes-val" style="color: var(--accent-light);">15</h4>
               <span>🧾 Notas Doadas</span>
             </div>
-          </div>
-
-          <!-- Código de Amizade -->
-          <div style="background: linear-gradient(135deg, rgba(26,115,232,0.12) 0%, rgba(52,168,83,0.12) 100%); border: 2px solid var(--primary-light); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 24px;">
-            <p style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">🤝 Código de Amizade</p>
-            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-              <span id="friend-code-display" style="font-size: 1.9rem; font-weight: 900; letter-spacing: 4px; color: var(--primary-light); font-family: monospace;">----</span>
-              <button id="copy-friend-code-btn" onclick="copyFriendCode()" title="Copiar código" style="background: rgba(26,115,232,0.15); border: 1px solid var(--primary-light); color: var(--primary-light); border-radius: var(--radius-sm); padding: 6px 14px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s;">
-                📋 Copiar
-              </button>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">Compartilhe este código para receber transferências de pontos.</p>
           </div>
 
           <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; border-bottom: 2px solid var(--surface-border); padding-bottom: 10px;">
