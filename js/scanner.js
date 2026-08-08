@@ -52,7 +52,7 @@ const Scanner = {
     });
   },
 
-  processScannedText(rawText) {
+  async processScannedText(rawText) {
     const currentUser = Storage.getCurrentUser();
     if (!currentUser) return;
 
@@ -79,7 +79,14 @@ const Scanner = {
       donationResult.status = 'invalid';
       donationResult.message = parsedData.errorMessage || 'Código inválido: Este QR Code não pertence a uma Nota Fiscal Eletrônica reconhecida pela SEFAZ.';
     } else {
-      // 3. Verifica duplicidade (se a nota já foi utilizada)
+      // 3. Tenta buscar o valor real em R$ direto do site da SEFAZ via proxy gratuito
+      const realSefazValue = await this.fetchSefazRealValue(rawText, parsedData.accessKey);
+      if (realSefazValue && realSefazValue > 0) {
+        parsedData.value = realSefazValue;
+        donationResult.value = realSefazValue;
+      }
+
+      // 4. Verifica duplicidade (se a nota já foi utilizada)
       const isDuplicate = donations.some(d => d.accessKey === parsedData.accessKey && d.status === 'valid');
 
       if (isDuplicate) {
@@ -130,6 +137,66 @@ const Scanner = {
     if (this.onScanCallback) {
       this.onScanCallback(donationResult, currentUser);
     }
+  },
+
+  /**
+   * Tenta extrair o valor real em R$ da SEFAZ
+   * 1. Via parâmetros nativos de URL (vNF= / v=)
+   * 2. Via Web Scraping da página da SEFAZ usando proxies de desenvolvimento livres
+   */
+  async fetchSefazRealValue(rawText, accessKey) {
+    if (!rawText || typeof rawText !== 'string') return null;
+
+    // 1. Extração direta de parâmetros de URL (ex: vNF=45.90 ou v=45.90)
+    const directMatch = rawText.match(/(?:vNF|v)=([\d\.,]+)/i);
+    if (directMatch) {
+      const valStr = directMatch[1].replace(',', '.');
+      const parsedVal = parseFloat(valStr);
+      if (!isNaN(parsedVal) && parsedVal > 0) return parsedVal;
+    }
+
+    // 2. Se for uma URL (HTTP/HTTPS), faz consulta via proxy CORS transparente ao HTML da SEFAZ
+    if (rawText.startsWith('http')) {
+      const targetUrl = rawText.replace(/&amp;/g, '&');
+      const proxies = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+      ];
+
+      for (const proxyUrl of proxies) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+          const response = await fetch(proxyUrl, { signal: controller.signal });
+          clearTimeout(timeoutId);
+
+          if (response.ok) {
+            const htmlText = await response.text();
+
+            // Padrões de seletores de valor total da SEFAZ (SP, PR, RJ, etc.)
+            // Ex: <span class="vTotalNFe">48,90</span>, <td class="totalNFe">, "Valor total R$ 48,90"
+            const valueMatch = htmlText.match(/class=["']vTotalNFe["'][^>]*>\s*([\d\.,]+)/i) ||
+                               htmlText.match(/class=["']txtMax["'][^>]*>\s*([\d\.,]+)/i) ||
+                               htmlText.match(/Valor\s+total\s*(?:R\$)?\s*([\d\.,]+)/i) ||
+                               htmlText.match(/vNF["']?\s*:\s*["']?([\d\.,]+)/i);
+
+            if (valueMatch && valueMatch[1]) {
+              const cleanedValStr = valueMatch[1].replace(/\./g, '').replace(',', '.');
+              const val = parseFloat(cleanedValStr);
+              if (!isNaN(val) && val > 0) {
+                console.log(`[SEFAZ Scraper] Valor real capturado da SEFAZ: R$ ${val.toFixed(2)}`);
+                return val;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('[SEFAZ Scraper] Erro ao consultar SEFAZ via proxy:', err);
+        }
+      }
+    }
+
+    return null;
   },
 
   /**

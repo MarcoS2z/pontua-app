@@ -167,6 +167,7 @@ function renderRecentHistory() {
       status: d.status,
       date: d.date,
       issuer: d.issuer,
+      value: d.value,
       pointsEarned: d.pointsEarned
     }));
 
@@ -204,7 +205,8 @@ function renderRecentHistory() {
     let iconClass = 'valid';
     let iconSymbol = '<i class="fa-solid fa-check"></i>';
     let statusTitle = 'Nota validada com sucesso';
-    let subtitle = item.issuer || 'Nota Fiscal';
+    const valText = item.value && item.value > 0 ? ` (R$ ${item.value.toFixed(2).replace('.', ',')})` : '';
+    let subtitle = (item.issuer || 'Nota Fiscal') + valText;
     let ptsText = `+${item.pointsEarned} pts`;
     let ptsColor = 'var(--gold)';
 

@@ -39,6 +39,7 @@ function renderFullHistory() {
       date: d.date,
       issuer: d.issuer,
       cnpj: d.cnpj,
+      value: d.value,
       accessKey: d.accessKey,
       pointsEarned: d.pointsEarned
     }));
@@ -123,8 +124,13 @@ function renderFullHistory() {
       } else {
         ptsText = `+${item.pointsEarned} pts`;
       }
+
+      const valFormatted = item.value && item.value > 0 
+        ? ` • <strong style="color: var(--accent-light);">Valor: R$ ${item.value.toFixed(2).replace('.', ',')}</strong>`
+        : '';
+
       detailsHtml = `
-        <p>${item.issuer || 'Nota Fiscal'} • CNPJ: ${item.cnpj || 'N/A'}</p>
+        <p>${item.issuer || 'Nota Fiscal'} • CNPJ: ${item.cnpj || 'N/A'}${valFormatted}</p>
         <p style="font-size: 0.78rem; font-family: monospace; color: var(--text-muted); margin-top: 4px;">Chave: ${item.accessKey || 'N/A'}</p>
       `;
     }
