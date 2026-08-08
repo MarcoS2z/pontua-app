@@ -281,13 +281,20 @@ function renderDonationsTable() {
     const date = new Date(d.date).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
     const initials = (d.userName || '?').split(' ').filter(n => n).slice(0, 2).map(n => n[0].toUpperCase()).join('');
     const shortKey = d.accessKey ? d.accessKey.substring(0, 10) + '...' + d.accessKey.substring(40) : '—';
+    const isSimulated = d.isSimulated || (d.rawUrl && d.rawUrl.includes('ABCDEF'));
+    const badgeTag = isSimulated
+      ? `<span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; background: rgba(251,188,4,0.18); color: var(--warning); border: 1px solid var(--warning);"><i class="fa-solid fa-bolt"></i> Simulada</span>`
+      : `<span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; background: rgba(52,168,83,0.18); color: var(--accent-light); border: 1px solid var(--accent-light);"><i class="fa-solid fa-circle-check"></i> Real</span>`;
 
     return `
       <tr>
         <td>
           <div style="display:flex; align-items:center; gap:10px;">
             <div class="user-avatar" style="width:32px; height:32px; font-size:0.8rem; flex-shrink:0;">${initials}</div>
-            <strong>${d.userName || '—'}</strong>
+            <div>
+              <strong>${d.userName || '—'}</strong><br>
+              ${badgeTag}
+            </div>
           </div>
         </td>
         <td style="color: var(--text-muted); font-size: 0.88rem;">${d.userEmail || '—'}</td>

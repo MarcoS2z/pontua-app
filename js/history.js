@@ -41,6 +41,7 @@ function renderFullHistory() {
       cnpj: d.cnpj,
       value: d.value,
       accessKey: d.accessKey,
+      isSimulated: d.isSimulated || (d.rawUrl && d.rawUrl.includes('ABCDEF')),
       pointsEarned: d.pointsEarned
     }));
 
@@ -123,6 +124,10 @@ function renderFullHistory() {
         ptsText = '+0 pts';
       } else {
         ptsText = `+${item.pointsEarned} pts`;
+        const badgeTag = item.isSimulated
+          ? `<span style="display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; background: rgba(251,188,4,0.18); color: var(--warning); border: 1px solid var(--warning); margin-left: 6px;"><i class="fa-solid fa-bolt" style="margin-right: 3px;"></i> Simulada</span>`
+          : `<span style="display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; background: rgba(52,168,83,0.18); color: var(--accent-light); border: 1px solid var(--accent-light); margin-left: 6px;"><i class="fa-solid fa-circle-check" style="margin-right: 3px;"></i> Nota Real</span>`;
+        statusTitle += ' ' + badgeTag;
       }
 
       const valFormatted = item.value && item.value > 0 

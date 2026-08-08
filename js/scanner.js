@@ -52,13 +52,14 @@ const Scanner = {
     });
   },
 
-  async processScannedText(rawText) {
+  async processScannedText(rawText, isExplicitlySimulated = false) {
     const currentUser = Storage.getCurrentUser();
     if (!currentUser) return;
 
     // 1. Executa validação de NFCe / NFe com Módulo 11 e análise de padrões SEFAZ
     const parsedData = this.parseAndValidateNFCe(rawText);
     const donations = Storage.getDonations();
+    const isSimulatedNote = isExplicitlySimulated || (rawText && (rawText.includes('ABCDEF') || rawText.includes('simulat') || rawText.includes('simula')));
 
     let donationResult = {
       id: 'don-' + Date.now(),
@@ -71,7 +72,8 @@ const Scanner = {
       issuer: parsedData.issuer || '',
       date: new Date().toISOString(),
       pointsEarned: 0,
-      status: 'invalid'
+      status: 'invalid',
+      isSimulated: isSimulatedNote
     };
 
     // 2. Se a validação falhar (código aleatório, QR de Pix, DV inválido, etc.)

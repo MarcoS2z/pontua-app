@@ -90,7 +90,7 @@ function simulateValidScan() {
   
   const validKey = base43 + String(dv); // 44 dígitos exatos
   const mockUrl = `https://www.sefaz.sp.gov.br/nfce/qrcode?p=${validKey}|2|1|1|ABCDEF`;
-  Scanner.processScannedText(mockUrl);
+  Scanner.processScannedText(mockUrl, true);
 }
 
 // Manipula o resultado da leitura da nota
@@ -168,6 +168,7 @@ function renderRecentHistory() {
       date: d.date,
       issuer: d.issuer,
       value: d.value,
+      isSimulated: d.isSimulated || (d.rawUrl && d.rawUrl.includes('ABCDEF')),
       pointsEarned: d.pointsEarned
     }));
 
@@ -204,7 +205,7 @@ function renderRecentHistory() {
   container.innerHTML = combined.map(item => {
     let iconClass = 'valid';
     let iconSymbol = '<i class="fa-solid fa-check"></i>';
-    let statusTitle = 'Nota validada com sucesso';
+    let statusTitle = 'Nota validada';
     const valText = item.value && item.value > 0 ? ` (R$ ${item.value.toFixed(2).replace('.', ',')})` : '';
     let subtitle = (item.issuer || 'Nota Fiscal') + valText;
     let ptsText = `+${item.pointsEarned} pts`;
@@ -228,6 +229,11 @@ function renderRecentHistory() {
         iconSymbol = '<i class="fa-solid fa-xmark"></i>';
         statusTitle = 'Nota inválida';
         ptsText = '+0 pts';
+      } else {
+        const badgeTag = item.isSimulated
+          ? `<span style="display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; background: rgba(251,188,4,0.18); color: var(--warning); border: 1px solid var(--warning); margin-left: 6px;"><i class="fa-solid fa-bolt" style="margin-right: 3px;"></i> Simulada</span>`
+          : `<span style="display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.72rem; font-weight: 800; background: rgba(52,168,83,0.18); color: var(--accent-light); border: 1px solid var(--accent-light); margin-left: 6px;"><i class="fa-solid fa-circle-check" style="margin-right: 3px;"></i> Nota Real</span>`;
+        statusTitle += ' ' + badgeTag;
       }
     }
 
