@@ -33,7 +33,31 @@ const Storage = {
     this.db.collection('users').onSnapshot(snapshot => {
       if (!snapshot.empty) {
         const users = [];
-        snapshot.forEach(doc => users.push(doc.data()));
+        const existingCodes = new Set();
+
+        snapshot.forEach(doc => {
+          const u = doc.data();
+          if (u.friendCode) existingCodes.add(u.friendCode);
+          users.push(u);
+        });
+
+        // Auto-healing: se algum usuário no Firestore não tiver friendCode, gera e salva no Firestore na hora
+        users.forEach(u => {
+          if (!u.friendCode) {
+            let code;
+            do {
+              const p1 = String(Math.floor(1000 + Math.random() * 9000));
+              const p2 = String(Math.floor(1000 + Math.random() * 9000));
+              code = `${p1}-${p2}`;
+            } while (existingCodes.has(code));
+            existingCodes.add(code);
+            u.friendCode = code;
+
+            // Salva de volta no Firestore
+            this.db.collection('users').doc(u.id).set(this.cleanForFirestore(u)).catch(e => console.warn(e));
+          }
+        });
+
         localStorage.setItem(APP_CONFIG.STORAGE_KEYS.USERS, JSON.stringify(users));
 
         // Atualiza a sessão se o usuário logado mudou
