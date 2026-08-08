@@ -29,16 +29,40 @@ document.addEventListener('DOMContentLoaded', () => {
   // 6. Form de digitação manual dentro do Modal
   const modalManualForm = document.getElementById('modal-manual-scan-form');
   if (modalManualForm) {
-    modalManualForm.addEventListener('submit', (e) => {
+    modalManualForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const input = document.getElementById('manual-qr-input');
+      const submitBtn = modalManualForm.querySelector('button[type="submit"]');
       const text = input ? input.value.trim() : '';
 
-      if (text) {
-        Scanner.processScannedText(text);
-        input.value = '';
-      } else {
+      if (!text) {
         Auth.showToast('Digite uma chave de 44 dígitos ou a URL da nota.', 'warning');
+        return;
+      }
+
+      // Trava: bloqueia submissão enquanto estiver processando (aguardando SEFAZ)
+      if (Scanner.isProcessing) {
+        Auth.showToast('Aguarde... a nota anterior ainda está sendo validada.', 'warning');
+        return;
+      }
+
+      // Desativa o botão e exibe estado de carregamento
+      Scanner.isProcessing = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="margin-right: 6px;"></i> Validando nota...';
+      }
+      input.value = '';
+
+      try {
+        await Scanner.processScannedText(text);
+      } finally {
+        // Reativa o botão ao finalizar (independente de erro ou sucesso)
+        Scanner.isProcessing = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass" style="margin-right: 6px;"></i> Validar Nota';
+        }
       }
     });
   }
