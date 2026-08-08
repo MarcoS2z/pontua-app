@@ -31,14 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Busca usuários por Nome ou Email
+// Busca usuários por Código de Amizade ou Nome
 function searchUsers(query) {
   const container = document.getElementById('search-results-container');
   if (!container) return;
 
   if (!query) {
     container.innerHTML = `
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Digite o nome ou e-mail do usuário para buscar.</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Digite o código de amizade ou nome do usuário para buscar.</p>
     `;
     return;
   }
@@ -46,16 +46,20 @@ function searchUsers(query) {
   const currentUser = Storage.getCurrentUser();
   const users = Storage.getUsers();
 
-  // Filtra por nome ou email (excluindo a si mesmo)
-  const results = users.filter(u => 
-    u.id !== currentUser.id && 
-    (u.name.toLowerCase().includes(query.toLowerCase()) || u.email.toLowerCase().includes(query.toLowerCase()))
+  // Busca por código de amizade exato OU por nome parcial (sem email)
+  const queryLower = query.toLowerCase().trim();
+  const results = users.filter(u =>
+    u.id !== currentUser.id &&
+    (
+      (u.friendCode && u.friendCode === query.trim()) ||
+      u.name.toLowerCase().includes(queryLower)
+    )
   );
 
   if (results.length === 0) {
     container.innerHTML = `
       <div style="padding: 16px; background-color: var(--surface-2); border-radius: var(--radius-md); text-align: center; color: var(--text-muted);">
-        Nenhum usuário encontrado com esse nome ou e-mail.
+        Nenhum usuário encontrado. Verifique o código de amizade ou o nome.
       </div>
     `;
     selectedRecipient = null;
@@ -77,7 +81,7 @@ function searchUsers(query) {
           <div class="user-avatar">${initials}</div>
           <div>
             <strong style="color: var(--text); display: block;">${u.name}</strong>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">${u.email}</span>
+            <span style="font-size: 0.85rem; color: var(--primary-light); font-family: monospace; font-weight: 700;">🤝 ${u.friendCode || 'Sem código'}</span>
           </div>
         </div>
         <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.85rem;">Selecionar</button>

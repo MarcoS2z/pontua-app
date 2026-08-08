@@ -130,7 +130,8 @@ const Storage = {
         streak: 12,
         totalNotes: 45,
         lastDonationDate: '2026-08-04',
-        registeredAt: '2026-01-01T10:00:00Z'
+        registeredAt: '2026-01-01T10:00:00Z',
+        friendCode: '0000-0001'
       },
       {
         id: 'user-2',
@@ -142,7 +143,8 @@ const Storage = {
         streak: 8,
         totalNotes: 28,
         lastDonationDate: '2026-08-04',
-        registeredAt: '2026-01-15T14:30:00Z'
+        registeredAt: '2026-01-15T14:30:00Z',
+        friendCode: '0000-0002'
       },
       {
         id: 'user-3',
@@ -154,7 +156,8 @@ const Storage = {
         streak: 5,
         totalNotes: 19,
         lastDonationDate: '2026-08-03',
-        registeredAt: '2026-02-01T09:15:00Z'
+        registeredAt: '2026-02-01T09:15:00Z',
+        friendCode: '0000-0003'
       },
       {
         id: 'user-4',
@@ -166,7 +169,8 @@ const Storage = {
         streak: 3,
         totalNotes: 12,
         lastDonationDate: '2026-08-02',
-        registeredAt: '2026-02-10T11:00:00Z'
+        registeredAt: '2026-02-10T11:00:00Z',
+        friendCode: '0000-0004'
       }
     ];
   },
@@ -306,6 +310,11 @@ const Storage = {
 
   getUserByEmail(email) {
     return this.getUsers().find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+  },
+
+  getUserByFriendCode(code) {
+    const normalized = code.replace(/\s/g, '').replace(/[^0-9-]/g, '');
+    return this.getUsers().find(u => u.friendCode && u.friendCode === normalized);
   },
 
   updateUser(updatedUser) {

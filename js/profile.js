@@ -49,6 +49,28 @@ function renderProfileInfo(user) {
   document.getElementById('profile-points-val').textContent = user.points;
   document.getElementById('profile-streak-val').textContent = `${user.streak}d`;
   document.getElementById('profile-notes-val').textContent = user.totalNotes || 0;
+
+  // Exibe o Código de Amizade — gera automaticamente se o usuário ainda não tiver um
+  if (!user.friendCode) {
+    user.friendCode = Auth.generateUniqueFriendCode(Storage.getUsers());
+    Storage.updateUser(user);
+  }
+  const codeDisplay = document.getElementById('friend-code-display');
+  if (codeDisplay) codeDisplay.textContent = user.friendCode;
+}
+
+function copyFriendCode() {
+  const user = Storage.getCurrentUser();
+  if (!user || !user.friendCode) return;
+  navigator.clipboard.writeText(user.friendCode).then(() => {
+    const btn = document.getElementById('copy-friend-code-btn');
+    if (btn) {
+      btn.textContent = '✅ Copiado!';
+      setTimeout(() => { btn.textContent = '📋 Copiar'; }, 2000);
+    }
+  }).catch(() => {
+    Auth.showToast('Não foi possível copiar automaticamente. Copie o código manualmente.', 'warning');
+  });
 }
 
 function changeUserPassword() {

@@ -72,7 +72,8 @@ const Auth = {
       streak: 0,
       totalNotes: 0,
       lastDonationDate: null,
-      registeredAt: new Date().toISOString()
+      registeredAt: new Date().toISOString(),
+      friendCode: Auth.generateUniqueFriendCode(Storage.getUsers())
     };
 
     const users = Storage.getUsers();
@@ -82,6 +83,18 @@ const Auth = {
     // Faz login automático
     Storage.setCurrentUser(newUser);
     return { success: true, user: newUser };
+  },
+
+  // Gera um código de amizade numérico único no formato XXXX-XXXX
+  generateUniqueFriendCode(existingUsers) {
+    const existing = new Set((existingUsers || []).map(u => u.friendCode).filter(Boolean));
+    let code;
+    do {
+      const part1 = String(Math.floor(1000 + Math.random() * 9000));
+      const part2 = String(Math.floor(1000 + Math.random() * 9000));
+      code = `${part1}-${part2}`;
+    } while (existing.has(code));
+    return code;
   },
 
   // Renderiza cabeçalho e menu de navegação responsivo
