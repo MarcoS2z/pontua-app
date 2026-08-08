@@ -192,7 +192,7 @@ function renderRecentHistory() {
   if (combined.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-        <span style="font-size: 2.5rem; display: block; margin-bottom: 8px;">🧾</span>
+        <i class="fa-solid fa-receipt" style="font-size: 2.5rem; display: block; margin-bottom: 8px;"></i>
         <p style="font-weight: 700;">Nenhuma atividade registrada ainda.</p>
         <p style="font-size: 0.85rem;">Utilize o scanner acima para registrar sua primeira nota!</p>
       </div>
@@ -202,7 +202,7 @@ function renderRecentHistory() {
 
   container.innerHTML = combined.map(item => {
     let iconClass = 'valid';
-    let iconSymbol = '✅';
+    let iconSymbol = '<i class="fa-solid fa-check"></i>';
     let statusTitle = 'Nota validada com sucesso';
     let subtitle = item.issuer || 'Nota Fiscal';
     let ptsText = `+${item.pointsEarned} pts`;
@@ -210,7 +210,7 @@ function renderRecentHistory() {
 
     if (item.type === 'transfer') {
       iconClass = item.isSender ? 'duplicate' : 'valid';
-      iconSymbol = '🎁';
+      iconSymbol = '<i class="fa-solid fa-gift"></i>';
       statusTitle = item.isSender ? 'Doação de Pontos Enviada' : 'Doação de Pontos Recebida';
       subtitle = item.isSender ? `Para ${item.otherName}` : `De ${item.otherName}`;
       ptsText = item.isSender ? `-${item.amount} pts` : `+${item.amount} pts`;
@@ -218,12 +218,12 @@ function renderRecentHistory() {
     } else {
       if (item.status === 'duplicate') {
         iconClass = 'duplicate';
-        iconSymbol = '🔁';
+        iconSymbol = '<i class="fa-solid fa-rotate-right"></i>';
         statusTitle = 'Nota já utilizada (repetida)';
         ptsText = '+0 pts';
       } else if (item.status === 'invalid') {
         iconClass = 'invalid';
-        iconSymbol = '❌';
+        iconSymbol = '<i class="fa-solid fa-xmark"></i>';
         statusTitle = 'Nota inválida';
         ptsText = '+0 pts';
       }

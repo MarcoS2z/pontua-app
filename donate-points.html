@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transferir Pontos | Pontua</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
@@ -17,7 +18,7 @@
       <main class="content-area">
         <div style="max-width: 650px; margin: 0 auto;">
           <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 1.8rem; font-weight: 900;">🎁 Transferir Pontos a Outro Usuário</h2>
+            <h2 style="font-size: 1.8rem; font-weight: 900;"><i class="fa-solid fa-gift text-gold" style="margin-right: 8px;"></i> Transferir Pontos a Outro Usuário</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem;">Transfira parte dos seus pontos acumulados para amigos ou outros doadores!</p>
           </div>
 
@@ -26,7 +27,7 @@
             
             <div style="display: flex; gap: 12px; margin-bottom: 16px;">
               <input type="text" id="search-user-input" class="form-control" placeholder="Digite o código de amizade (ex: 1234-5678) ou o nome..." style="flex: 1;">
-              <button id="search-user-btn" class="btn btn-primary">🔍 Buscar</button>
+              <button id="search-user-btn" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass" style="margin-right: 6px;"></i> Buscar</button>
             </div>
 
             <div id="search-results-container">
@@ -42,12 +43,12 @@
 
             <form id="donate-points-form">
               <div class="form-group">
-                <label for="points-amount-input">Quantidade de Pontos (⭐)</label>
+                <label for="points-amount-input">Quantidade de Pontos <i class="fa-solid fa-star text-gold" style="margin-left: 4px;"></i></label>
                 <input type="number" id="points-amount-input" class="form-control" placeholder="Ex: 50" min="1" required>
               </div>
 
               <button type="submit" class="btn btn-accent" style="width: 100%; padding: 14px; margin-top: 10px;">
-                🎁 Confirmar Transferência de Pontos
+                <i class="fa-solid fa-gift" style="margin-right: 8px;"></i> Confirmar Transferência de Pontos
               </button>
             </form>
           </div>

@@ -39,6 +39,18 @@
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Helper Classes para Ícones Font Awesome */
+.text-gold { color: var(--gold) !important; }
+.text-streak { color: var(--streak) !important; }
+.text-accent { color: var(--accent-light) !important; }
+.text-primary { color: var(--primary-light) !important; }
+.text-danger { color: var(--danger) !important; }
+.text-warning { color: var(--warning) !important; }
+
+.stat-pill i {
+  font-size: 1.05rem;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

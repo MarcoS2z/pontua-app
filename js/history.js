@@ -86,7 +86,7 @@ function renderFullHistory() {
   if (pageItems.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-        <span style="font-size: 3rem; display: block; margin-bottom: 12px;">📂</span>
+        <i class="fa-solid fa-folder-open" style="font-size: 3rem; display: block; margin-bottom: 12px;"></i>
         <p style="font-weight: 700;">Nenhum registro encontrado para este filtro.</p>
       </div>
     `;
@@ -96,7 +96,7 @@ function renderFullHistory() {
 
   container.innerHTML = pageItems.map(item => {
     let iconClass = 'valid';
-    let iconSymbol = '✅';
+    let iconSymbol = '<i class="fa-solid fa-check"></i>';
     let statusTitle = 'Nota Validada com Sucesso';
     let detailsHtml = '';
     let ptsText = '';
@@ -104,20 +104,20 @@ function renderFullHistory() {
 
     if (item.type === 'transfer') {
       iconClass = item.isSender ? 'duplicate' : 'valid';
-      iconSymbol = '🎁';
+      iconSymbol = '<i class="fa-solid fa-gift"></i>';
       statusTitle = item.isSender ? 'Doação de Pontos Enviada' : 'Doação de Pontos Recebida';
-      detailsHtml = `<p>${item.isSender ? 'Para' : 'De'}: ${item.otherName} • ${item.otherEmail}</p>`;
+      detailsHtml = `<p>${item.isSender ? 'Para' : 'De'}: ${item.otherName}</p>`;
       ptsText = item.isSender ? `-${item.amount} pts` : `+${item.amount} pts`;
       ptsColor = item.isSender ? 'var(--streak)' : 'var(--gold)';
     } else {
       if (item.status === 'duplicate') {
         iconClass = 'duplicate';
-        iconSymbol = '🔁';
+        iconSymbol = '<i class="fa-solid fa-rotate-right"></i>';
         statusTitle = 'Nota Já Utilizada (Repetida)';
         ptsText = '+0 pts';
       } else if (item.status === 'invalid') {
         iconClass = 'invalid';
-        iconSymbol = '❌';
+        iconSymbol = '<i class="fa-solid fa-xmark"></i>';
         statusTitle = 'Nota Inválida';
         ptsText = '+0 pts';
       } else {

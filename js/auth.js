@@ -116,11 +116,11 @@ const Auth = {
         <div class="header-bar">
           <div class="header-user-stats">
             <div class="stat-pill points" title="Seus pontos acumulados">
-              <span>⭐</span>
+              <i class="fa-solid fa-star text-gold"></i>
               <span id="user-points-val">${user.points}</span>
             </div>
             <div class="stat-pill streak" title="${user.streak} dias seguidos doando notas!">
-              <span>🔥</span>
+              <i class="fa-solid fa-fire text-streak"></i>
               <span id="user-streak-val">${user.streak} dias</span>
             </div>
           </div>
@@ -141,7 +141,7 @@ const Auth = {
         <aside class="sidebar">
           <div>
             <div class="sidebar-brand">
-              <div class="logo-icon">🧾</div>
+              <div class="logo-icon"><i class="fa-solid fa-receipt"></i></div>
               <div>
                 <h1>Pon<span>tua</span></h1>
               </div>
@@ -149,50 +149,50 @@ const Auth = {
             <ul class="nav-list">
               <li>
                 <a href="dashboard.html" class="nav-link ${activePage === 'dashboard' ? 'active' : ''}">
-                  <span class="nav-icon">🏠</span>
+                  <i class="fa-solid fa-house nav-icon"></i>
                   <span>Início</span>
                 </a>
               </li>
               <li>
                 <a href="history.html" class="nav-link ${activePage === 'history' ? 'active' : ''}">
-                  <span class="nav-icon">📋</span>
+                  <i class="fa-solid fa-clock-rotate-left nav-icon"></i>
                   <span>Histórico</span>
                 </a>
               </li>
               <li>
                 <a href="store.html" class="nav-link ${activePage === 'store' ? 'active' : ''}">
-                  <span class="nav-icon">🛒</span>
+                  <i class="fa-solid fa-store nav-icon"></i>
                   <span>Loja</span>
                 </a>
               </li>
               <li>
                 <a href="ranking.html" class="nav-link ${activePage === 'ranking' ? 'active' : ''}">
-                  <span class="nav-icon">🏆</span>
+                  <i class="fa-solid fa-trophy nav-icon"></i>
                   <span>Ranking</span>
                 </a>
               </li>
               <li>
                 <a href="donate-points.html" class="nav-link ${activePage === 'donate' ? 'active' : ''}">
-                  <span class="nav-icon">🎁</span>
+                  <i class="fa-solid fa-gift nav-icon"></i>
                   <span>Transferir Pontos</span>
                 </a>
               </li>
               <li>
                 <a href="profile.html" class="nav-link ${activePage === 'profile' ? 'active' : ''}">
-                  <span class="nav-icon">👤</span>
+                  <i class="fa-solid fa-user nav-icon"></i>
                   <span>Perfil</span>
                 </a>
               </li>
               <li>
                 <a href="about.html" class="nav-link ${activePage === 'about' ? 'active' : ''}">
-                  <span class="nav-icon">💙</span>
+                  <i class="fa-solid fa-circle-info nav-icon"></i>
                   <span>Sobre Nós</span>
                 </a>
               </li>
               ${isAdmin ? `
               <li>
                 <a href="admin.html" class="nav-link admin-link ${activePage === 'admin' ? 'active' : ''}">
-                  <span class="nav-icon">⚙️</span>
+                  <i class="fa-solid fa-sliders nav-icon"></i>
                   <span>Painel Admin</span>
                 </a>
               </li>
@@ -202,7 +202,7 @@ const Auth = {
 
           <div class="sidebar-footer" style="padding-top: 20px;">
             <button id="logout-btn" class="btn btn-outline" style="width: 100%; border-color: var(--danger); color: var(--danger);">
-              🚪 Sair
+              <i class="fa-solid fa-right-from-bracket" style="margin-right: 6px;"></i> Sair
             </button>
           </div>
         </aside>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Histórico de Doações | Pontua</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
@@ -17,17 +18,17 @@
       <main class="content-area">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
           <div>
-            <h2 style="font-size: 1.8rem; font-weight: 900;">📋 Histórico Completo de Doações</h2>
+            <h2 style="font-size: 1.8rem; font-weight: 900;"><i class="fa-solid fa-clock-rotate-left" style="margin-right: 8px; color: var(--primary-light);"></i> Histórico Completo de Doações</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem;">Veja todas as suas notas fiscais validadas, repetidas e inválidas.</p>
           </div>
 
           <!-- Filtros de Status -->
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn btn-outline filter-btn active" data-filter="all">Todas</button>
-            <button class="btn btn-outline filter-btn" data-filter="valid">✅ Válidas</button>
-            <button class="btn btn-outline filter-btn" data-filter="duplicate">🔁 Repetidas</button>
-            <button class="btn btn-outline filter-btn" data-filter="invalid">❌ Inválidas</button>
-            <button class="btn btn-outline filter-btn" data-filter="transfers">🎁 Pontos Doados</button>
+            <button class="btn btn-outline filter-btn" data-filter="valid"><i class="fa-solid fa-check text-accent" style="margin-right: 4px;"></i> Válidas</button>
+            <button class="btn btn-outline filter-btn" data-filter="duplicate"><i class="fa-solid fa-rotate-right text-warning" style="margin-right: 4px;"></i> Repetidas</button>
+            <button class="btn btn-outline filter-btn" data-filter="invalid"><i class="fa-solid fa-xmark text-danger" style="margin-right: 4px;"></i> Inválidas</button>
+            <button class="btn btn-outline filter-btn" data-filter="transfers"><i class="fa-solid fa-gift text-gold" style="margin-right: 4px;"></i> Pontos Doados</button>
           </div>
         </div>
 

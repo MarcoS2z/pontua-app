@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | Pontua</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
@@ -24,7 +25,7 @@
             <!-- Hero Box do Scanner -->
             <div class="card scanner-hero-card">
               <div class="scanner-icon-pulse">
-                📷
+                <i class="fa-solid fa-qrcode"></i>
               </div>
               <h2>Escanear Nota Fiscal</h2>
               <p>
@@ -33,7 +34,7 @@
 
               <div style="margin-top: 16px;">
                 <button id="start-reading-btn" class="btn btn-accent" style="padding: 16px 36px; font-size: 1.1rem;">
-                  📷 Iniciar Leitura
+                  <i class="fa-solid fa-qrcode" style="margin-right: 8px;"></i> Iniciar Leitura
                 </button>
               </div>
             </div>
@@ -41,9 +42,9 @@
             <!-- Card de Histórico Recente -->
             <div class="card">
               <div class="card-header">
-                <h3>📋 Últimas Doações Realizadas</h3>
+                <h3><i class="fa-solid fa-clock-rotate-left" style="margin-right: 8px; color: var(--primary-light);"></i> Últimas Doações Realizadas</h3>
                 <a href="history.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.85rem;">
-                  Ver Histórico Completo ▶
+                  Ver Histórico Completo <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; margin-left: 4px;"></i>
                 </a>
               </div>
 
@@ -58,7 +59,7 @@
           <div>
             <div class="info-box-card">
               <div class="info-box-header">
-                <span>🔥</span>
+                <span><i class="fa-solid fa-fire text-streak" style="font-size: 1.5rem;"></i></span>
                 <div>
                   <h4>Mantenha a Sequência!</h4>
                   <p style="font-size: 0.82rem; color: var(--text-muted);">Doe pelo menos uma nota por dia para não perder seu streak.</p>
@@ -68,7 +69,7 @@
 
             <div class="info-box-card" style="border-color: rgba(255, 215, 0, 0.3);">
               <div class="info-box-header">
-                <span>⭐</span>
+                <span><i class="fa-solid fa-star text-gold" style="font-size: 1.5rem;"></i></span>
                 <div>
                   <h4>Ganha +10 Pontos</h4>
                   <p style="font-size: 0.82rem; color: var(--text-muted);">Cada nota válida adiciona pontos para você trocar por prêmios na loja.</p>
@@ -78,7 +79,7 @@
 
             <div class="info-box-card" style="border-color: rgba(52, 168, 83, 0.3);">
               <div class="info-box-header">
-                <span>🛒</span>
+                <span><i class="fa-solid fa-store text-accent" style="font-size: 1.5rem;"></i></span>
                 <div>
                   <h4>Troque na Loja</h4>
                   <p style="font-size: 0.82rem; color: var(--text-muted);">Acesse a loja e resgate prêmios exclusivos com seus pontos acumulados!</p>
@@ -95,14 +96,14 @@
   <div id="scanner-modal-overlay" class="modal-overlay">
     <div class="modal-card" style="text-align: center; max-width: 480px;">
       <div class="modal-header">
-        <h3>📷 Escanear Nota Fiscal</h3>
+        <h3><i class="fa-solid fa-qrcode" style="margin-right: 8px;"></i> Escanear Nota Fiscal</h3>
         <button class="modal-close" onclick="closeScannerModal()">&times;</button>
       </div>
 
       <div style="padding: 10px 0;">
         <!-- Ícone / Animação Carregando / Pulso -->
         <div class="scanner-icon-pulse" style="width: 84px; height: 84px; font-size: 2.2rem; margin: 0 auto 16px;">
-          ⌛
+          <i class="fa-solid fa-barcode text-primary"></i>
         </div>
 
         <p style="font-size: 1.1rem; font-weight: 800; color: var(--accent-light); margin-bottom: 6px;">
@@ -128,7 +129,7 @@
 
         <!-- Botão de teste na parte inferior do pop-up -->
         <button id="modal-simulate-btn" class="btn btn-accent" style="width: 100%; padding: 12px; margin-bottom: 10px; font-size: 0.95rem;">
-          ⚡ Simular Leitura
+          <i class="fa-solid fa-bolt" style="margin-right: 6px;"></i> Simular Leitura
         </button>
 
         <button class="btn btn-outline" style="width: 100%; padding: 10px; font-size: 0.9rem;" onclick="closeScannerModal()">

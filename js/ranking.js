@@ -48,7 +48,7 @@ function renderCurrentRanking() {
   const myPositionContainer = document.getElementById('my-ranking-position-container');
   if (myPositionContainer) {
     const isTop3 = myRank <= 3;
-    const badgeIcon = myRank === 1 ? '🥇' : myRank === 2 ? '🥈' : myRank === 3 ? '🥉' : '📍';
+    const badgeIcon = myRank === 1 ? '<i class="fa-solid fa-crown text-gold"></i>' : myRank === 2 ? '<i class="fa-solid fa-medal" style="color: #c0c0c0;"></i>' : myRank === 3 ? '<i class="fa-solid fa-medal" style="color: #cd7f32;"></i>' : '<i class="fa-solid fa-location-dot text-primary"></i>';
 
     myPositionContainer.innerHTML = `
       <div class="card" style="padding: 16px 20px; border-color: var(--primary-light); background: linear-gradient(135deg, rgba(26, 115, 232, 0.15), var(--surface-2)); display: flex; align-items: center; justify-content: space-between; gap: 16px;">
@@ -56,11 +56,11 @@ function renderCurrentRanking() {
           <div style="font-size: 1.8rem;">${badgeIcon}</div>
           <div>
             <h4 style="font-size: 1.05rem; font-weight: 900; color: var(--text);">Sua Posição no Ranking: <span style="color: var(--gold);">#${myRank}º Lugar</span></h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">${isTop3 ? 'Parabéns! Você está no Pódio do ciclo atual! 🎉' : 'Doe mais notas fiscais para subir de posição e chegar ao pódio!'}</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">${isTop3 ? 'Parabéns! Você está no Pódio do ciclo atual! <i class="fa-solid fa-sparkles text-gold"></i>' : 'Doe mais notas fiscais para subir de posição e chegar ao pódio!'}</p>
           </div>
         </div>
         <div style="text-align: right; white-space: nowrap;">
-          <span style="font-size: 1.1rem; font-weight: 900; color: var(--accent-light);">🧾 ${myTotalNotes} notas</span>
+          <span style="font-size: 1.1rem; font-weight: 900; color: var(--accent-light);"><i class="fa-solid fa-receipt text-accent" style="margin-right: 4px;"></i> ${myTotalNotes} notas</span>
         </div>
       </div>
     `;
@@ -71,7 +71,7 @@ function renderCurrentRanking() {
   if (podiumContainer) {
     podiumContainer.innerHTML = top3.map((user, idx) => {
       const rank = idx + 1;
-      const medals = ['🥇', '🥈', '🥉'];
+      const medals = ['<i class="fa-solid fa-crown text-gold"></i>', '<i class="fa-solid fa-medal" style="color: #c0c0c0;"></i>', '<i class="fa-solid fa-medal" style="color: #cd7f32;"></i>'];
       const initials = user.name
         .split(' ')
         .filter(n => n.length > 0)
@@ -84,7 +84,7 @@ function renderCurrentRanking() {
           <div class="podium-badge">${medals[idx]}</div>
           <div class="podium-avatar">${initials}</div>
           <div class="podium-name">${user.name}</div>
-          <div class="podium-notes">🧾 ${user.totalNotes || 0} notas</div>
+          <div class="podium-notes"><i class="fa-solid fa-receipt text-accent" style="margin-right: 4px;"></i> ${user.totalNotes || 0} notas</div>
         </div>
       `;
     }).join('');

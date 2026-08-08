@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu Perfil | Pontua</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/profile.css">
 </head>
@@ -26,11 +27,13 @@
 
           <!-- Código de Amizade -->
           <div style="background: linear-gradient(135deg, rgba(26,115,232,0.12) 0%, rgba(52,168,83,0.12) 100%); border: 2px solid var(--primary-light); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 24px;">
-            <p style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">🤝 Código de Amizade</p>
+            <p style="font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">
+              <i class="fa-solid fa-user-group text-primary" style="margin-right: 6px;"></i> Código de Amizade
+            </p>
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
               <span id="friend-code-display" style="font-size: 1.9rem; font-weight: 900; letter-spacing: 4px; color: var(--primary-light); font-family: monospace;">----</span>
               <button id="copy-friend-code-btn" onclick="copyFriendCode()" title="Copiar código" style="background: rgba(26,115,232,0.15); border: 1px solid var(--primary-light); color: var(--primary-light); border-radius: var(--radius-sm); padding: 6px 14px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.2s;">
-                📋 Copiar
+                <i class="fa-regular fa-copy" style="margin-right: 4px;"></i> Copiar
               </button>
             </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">Compartilhe este código para receber transferências de pontos.</p>
@@ -42,20 +45,20 @@
           <div class="profile-stats-grid">
             <div class="profile-stat-box">
               <h4 id="profile-points-val" style="color: var(--gold);">150</h4>
-              <span>⭐ Pontos Acumulados</span>
+              <span><i class="fa-solid fa-star text-gold" style="margin-right: 4px;"></i> Pontos Acumulados</span>
             </div>
             <div class="profile-stat-box">
               <h4 id="profile-streak-val" style="color: var(--streak);">7d</h4>
-              <span>🔥 Sequência Atual</span>
+              <span><i class="fa-solid fa-fire text-streak" style="margin-right: 4px;"></i> Sequência Atual</span>
             </div>
             <div class="profile-stat-box">
               <h4 id="profile-notes-val" style="color: var(--accent-light);">15</h4>
-              <span>🧾 Notas Doadas</span>
+              <span><i class="fa-solid fa-receipt text-accent" style="margin-right: 4px;"></i> Notas Doadas</span>
             </div>
           </div>
 
           <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; border-bottom: 2px solid var(--surface-border); padding-bottom: 10px;">
-            🔐 Alterar Senha
+            <i class="fa-solid fa-lock" style="margin-right: 8px; color: var(--primary-light);"></i> Alterar Senha
           </h3>
 
           <form id="change-password-form">

@@ -65,8 +65,8 @@ function copyFriendCode() {
   navigator.clipboard.writeText(user.friendCode).then(() => {
     const btn = document.getElementById('copy-friend-code-btn');
     if (btn) {
-      btn.textContent = '✅ Copiado!';
-      setTimeout(() => { btn.textContent = '📋 Copiar'; }, 2000);
+      btn.innerHTML = '<i class="fa-solid fa-check text-accent" style="margin-right: 4px;"></i> Copiado!';
+      setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy" style="margin-right: 4px;"></i> Copiar'; }, 2000);
     }
   }).catch(() => {
     Auth.showToast('Não foi possível copiar automaticamente. Copie o código manualmente.', 'warning');

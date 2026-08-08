@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Administrativo | Pontua</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/admin.css">
 </head>
@@ -17,18 +18,18 @@
       <main class="content-area">
         <div style="margin-bottom: 24px;">
           <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--gold); display: flex; align-items: center; gap: 10px;">
-            <span>⚙️</span> Painel Administrativo
+            <i class="fa-solid fa-sliders text-gold"></i> Painel Administrativo
           </h2>
           <p style="color: var(--text-muted);">Gerenciamento de doações, usuários, prêmios e configurações globais.</p>
         </div>
 
         <!-- Abas do Painel Admin -->
         <div class="admin-nav-tabs">
-          <button class="admin-tab-btn active" data-tab="tab-stats">📊 Estatísticas Globais</button>
-          <button class="admin-tab-btn" data-tab="tab-users">👥 Gerenciar Usuários</button>
-          <button class="admin-tab-btn" data-tab="tab-donations">🧾 Histórico de Notas</button>
-          <button class="admin-tab-btn" data-tab="tab-point-transfers">🎁 Doação de Pontos</button>
-          <button class="admin-tab-btn" data-tab="tab-settings">⚙️ Configurações & Reset de Pontos</button>
+          <button class="admin-tab-btn active" data-tab="tab-stats"><i class="fa-solid fa-chart-pie" style="margin-right: 6px;"></i> Estatísticas Globais</button>
+          <button class="admin-tab-btn" data-tab="tab-users"><i class="fa-solid fa-users" style="margin-right: 6px;"></i> Gerenciar Usuários</button>
+          <button class="admin-tab-btn" data-tab="tab-donations"><i class="fa-solid fa-receipt" style="margin-right: 6px;"></i> Histórico de Notas</button>
+          <button class="admin-tab-btn" data-tab="tab-point-transfers"><i class="fa-solid fa-gift" style="margin-right: 6px;"></i> Doação de Pontos</button>
+          <button class="admin-tab-btn" data-tab="tab-settings"><i class="fa-solid fa-gear" style="margin-right: 6px;"></i> Configurações & Reset de Pontos</button>
         </div>
 
         <!-- Conteúdo Aba 1: Estatísticas Globais -->
